@@ -4,14 +4,28 @@ Open Photo API / PHP Library
 
 ----------------------------------------
 
-<a name="commandline"></a>
+<a name="php"></a>
+### How to use the library
+
+To use the library you need to first include `OpenPhotoOAuth.php`, then instantiate an instance of the class and start making calls.
+    
+    include 'OpenPhotoOAuth.php';
+    $client = new OpenPhotoOAuth($host, $consumerKey, $consumerSecret, $token, $tokenSecret);
+    $resp = $client->get('/photos/list.json');
+    $resp = $client->post('/photo/62/update.json', array('tags' => 'tag1,tag2'));
+
+----------------------------------------
+
+<a name="cli"></a>
 ### Using from the command line
 
 Make sure that the `openphoto` file is executable.
 
     chown o+x openphoto
     
-You'll then want to export your secrets to the environment. We suggest putting them in a file and sourcing it prior to running `openphoto` commands.
+You'll then want to export your secrets to the environment.
+We suggest putting them in a file and sourcing it prior to running `openphoto` commands.
+<a href="#credentials">Click here for instructions on getting credentials</a>.
 
     # env.sh
     export consumerKey=your_consumer_key
@@ -73,3 +87,10 @@ Now you can run commands to the OpenPhoto API from your shell!
         "path20x20" : "http:\/\/current.openphoto.me\/photo\/62\/create\/ceb90\/20x20.jpg"
       }
     }
+
+<a name="credentials"></a>
+#### Getting your credentials
+
+You can get your credentals by clicking on the arrow next to your email address once you're logged into your site and then clicking on settings.
+If you don't have any credentials then you can create one for yourself by going to `/v1/oauth/flow`.
+Once completed go back to the settings page and you should see the credential you just created
