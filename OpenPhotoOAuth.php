@@ -42,7 +42,8 @@ class OpenPhotoOAuth
           )
       )
     );
-    $ch = curl_init($request['signed_url']);
+    $ch = curl_init($this->constructEndpoint($endpoint, true));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: {$request['header']}"));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $resp = curl_exec($ch);
     curl_close($ch);
@@ -92,7 +93,8 @@ class OpenPhotoOAuth
           )
       )
     );
-    $ch = curl_init($request['signed_url']);
+    $ch = curl_init($this->constructEndpoint($endpoint, true));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: {$request['header']}"));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
@@ -101,8 +103,11 @@ class OpenPhotoOAuth
     return $resp;
   }
 
-  private function constructEndpoint($endpoint)
+  private function constructEndpoint($endpoint, $includeConsumerKey = false)
   {
-    return sprintf('http://%s%s', $this->host, $endpoint);
+    if($includeConsumerKey)
+      return sprintf('http://%s%s?oauth_consumer_key=%s', $this->host, $endpoint, $this->consumerKey);
+    else
+      return sprintf('http://%s%s', $this->host, $endpoint);
   }
 }
