@@ -27,9 +27,10 @@ class OpenPhotoOAuth
 
   public function get($endpoint, $params = null)
   {
+    $curlEndpoint = $endpoint;
     if(!empty($params))
-      $endpoint .= sprintf('?%s', http_build_query($params));
-    $ch = curl_init($this->constructEndpoint($endpoint, true, $params));
+      $curlEndpoint .= sprintf('?%s', http_build_query($params));
+    $ch = curl_init($this->constructEndpoint($curlEndpoint, true, $params));
     if(!empty($this->consumerKey))
     {
       $client = new OAuthSimple($this->consumerKey, $this->consumerSecret);
