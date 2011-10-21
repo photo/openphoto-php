@@ -326,7 +326,7 @@ class OAuthSimple {
     function _oauthEscape($string) {
         if ($string === 0)
             return 0;
-        if (empty($string))
+        if (strlen($string) == 0)
             return '';
         if (is_array($string))
             throw new OAuthSimpleException('Array passed to _oauthEscape');
@@ -379,9 +379,15 @@ class OAuthSimple {
         $ra = 0;
         ksort($this->_parameters);
         foreach ( $this->_parameters as $paramName=>$paramValue) {
-            if (preg_match('/\w+_secret/',$paramName))
+            if(strpos($paramValue, '@') === 0 && file_exists(substr($paramValue, 1)))
+            {
                 continue;
-            if (is_array($paramValue))
+            }
+            elseif (preg_match('/\w+_secret/',$paramName))
+            {
+                continue;
+            }
+            elseif (is_array($paramValue))
             {
                 sort($paramValue);
                 foreach($paramValue as $element)

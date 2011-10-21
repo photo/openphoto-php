@@ -5,7 +5,7 @@ $consumerSecret = getenv('consumerSecret');
 $token = getenv('token');
 $tokenSecret = getenv('tokenSecret');
 
-$arguments = getopt('F:X:h:e:pv');
+$arguments = getopt('F:X:h:e:pv', array('encode::'));
 $host = 'localhost';
 if(isset($arguments['h']))
   $host = $arguments['h'];
@@ -21,13 +21,17 @@ if(isset($arguments['p']))
 $verbose = false;
 if(isset($arguments['v']))
   $verbose = true;
+$encode = false;
+if(isset($arguments['encode']))
+  $encode = true;
+
 $fields = array();
 if(isset($arguments['F']))
 {
   foreach((array)$arguments['F'] as $field)
   {
     $parts = explode('=', $field);
-    if($parts[0] == 'photo' && strncmp($parts[1][0], '@', 1) == 0 && is_file(substr($parts[1], 1)))
+    if($encode && $parts[0] == 'photo' && strncmp($parts[1][0], '@', 1) == 0 && is_file(substr($parts[1], 1)))
       $fields[$parts[0]] = base64_encode(file_get_contents(substr($parts[1], 1)));
     else
       $fields[$parts[0]] = $parts[1];

@@ -38,6 +38,7 @@ class OpenPhotoOAuth
         array(
           'action' => 'GET',
           'path' => $this->constructEndpoint($endpoint),
+          'version' => '1.0a',
           'parameters' => $params,
           'signatures' => 
             array(
@@ -68,6 +69,7 @@ class OpenPhotoOAuth
       array(
         'path' => '',
         'parameters' => $params,
+        'version' => '1.0a',
         'signatures' => array(
           'consumer_key' => $this->consumerKey,
           'consumer_secret' => $this->consumerSecret
@@ -92,6 +94,7 @@ class OpenPhotoOAuth
         array(
           'action' => 'POST',
           'path' => $this->constructEndpoint($endpoint),
+          'version' => '1.0a',
           'parameters' => $params,
           'signatures' => 
             array(
@@ -107,7 +110,7 @@ class OpenPhotoOAuth
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, 1);
     if(!empty($params))
-      curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     $resp = curl_exec($ch);
     curl_close($ch);
     return $resp;
