@@ -5,8 +5,10 @@ $consumerSecret = getenv('consumerSecret');
 $token = getenv('token');
 $tokenSecret = getenv('tokenSecret');
 
-$arguments = getopt('F:X:h:e:pv', array('encode::'));
+$arguments = getopt('F:X:h:e:pvs', array('encode::'));
 $host = 'localhost';
+$useSSL = false;
+
 if(isset($arguments['h']))
   $host = $arguments['h'];
 $method = 'get';
@@ -21,6 +23,8 @@ if(isset($arguments['p']))
 $verbose = false;
 if(isset($arguments['v']))
   $verbose = true;
+if(isset($arguments['s']))
+  $useSSL = true;
 $encode = false;
 if(isset($arguments['encode']))
   $encode = true;
@@ -40,13 +44,14 @@ if(isset($arguments['F']))
 
 include 'OpenPhotoOAuth.php';
 $client = new OpenPhotoOAuth($host, $consumerKey, $consumerSecret, $token, $tokenSecret);
+$client->useSSL($useSSL);
 if($method == 'get')
   $resp = $client->get($endpoint, $fields);
 elseif($method == 'post')
   $resp = $client->post($endpoint, $fields);
 
 if($verbose)
-  echo sprintf("==========\nMethod: %s\nHost: %s\nEndpoint: %s\n==========\n\n", $method, $host, $endpoint);
+  echo sprintf("==========\nMethod: %s\nHost: %s\nEndpoint: %s\nSSL: %s\n==========\n\n", $method, $host, $endpoint, $useSSL ? 'Yes' : 'No');
 
 if($pretty)
   echo indent($resp);

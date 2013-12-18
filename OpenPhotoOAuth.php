@@ -116,18 +116,23 @@ class OpenPhotoOAuth
     return $resp;
   }
 
+  public function useSSL($bool)
+  {
+    $this->protocol = $bool ? 'https' : 'http';
+  }
+
   private function constructEndpoint($endpoint, $includeConsumerKey = false)
   {
     if($includeConsumerKey)
     {
       if(stristr($endpoint, '?') === false)
-        return sprintf('http://%s%s?oauth_consumer_key=%s', $this->host, $endpoint, $this->consumerKey);
+        return sprintf('%s://%s%s?oauth_consumer_key=%s', $this->protocol, $this->host, $endpoint, $this->consumerKey);
       else
-        return sprintf('http://%s%s&oauth_consumer_key=%s', $this->host, $endpoint, $this->consumerKey);
+        return sprintf('%s://%s%s&oauth_consumer_key=%s', $this->protocol, $this->host, $endpoint, $this->consumerKey);
     }
     else
     {
-      return sprintf('http://%s%s', $this->host, $endpoint);
+      return sprintf('%s://%s%s', $this->protocol, $this->host, $endpoint);
     }
   }
 }
